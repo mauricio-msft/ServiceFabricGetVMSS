@@ -99,26 +99,6 @@ namespace HttpClientSample
 
                 Console.WriteLine("");
             }
-        }
-
-        static void ListVmsInSubscription(string token)
-        {
-            ServiceClientCredentials serviceClientCreds = new TokenCredentials(token);
-            ResourceGraphClient argClient = new ResourceGraphClient(serviceClientCreds);
-            QueryRequest request = new QueryRequest();
-            request.Subscriptions = new List<string>(){ Subscription };
-            request.Query = "resources " +
-                " | where type =~ \"Microsoft.Compute/VirtualMachineScaleSets\" " +
-                " | extend extensions = properties.virtualMachineProfile.extensionProfile.extensions " +
-                " | mvexpand extensions " +
-                " | where extensions.properties.type == \"ServiceFabricNode\" " +
-                " | extend clusterId = split(extensions.properties.settings.clusterEndpoint, '/')[5] " +
-                " | extend nodeTypeRef = extensions.properties.settings.nodeTypeRef " +
-                " | project id, clusterId, nodeTypeRef";
-
-            QueryResponse response = argClient.Resources(request);
-            //Console.WriteLine("Records: " + response.Count);
-            //Console.WriteLine("Data:\n" + response.Data);
-        }        
+        }      
     }
 }
